@@ -47,6 +47,9 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
 
     public bool gameIsOver;
 
+    float timeSpecial;
+    float timeSpecialLimit;
+
     private void Start()
     {
         //PhotonView.DontDestroyOnLoad(this);
@@ -98,6 +101,9 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         P2end = false;
 
         gameIsOver = false;
+
+        timeSpecial = 0;
+        timeSpecialLimit = 2;
     }
  
     private void Update()
@@ -194,6 +200,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
     private void checkInput()
     {
         timeShoot += Time.deltaTime * 0.2f;
+        timeSpecial += Time.deltaTime;
 
         if (Input.GetKeyUp(KeyCode.Alpha0)) //reduz próprio HP, retirar na build final
         {
@@ -241,6 +248,79 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
 
     void useSpecial()
     {
+        Debug.Log("special attack!");
+
+        //int Num = 8;
+        //int radius = 13;
+        if(special == 1)
+        {
+            special = Mathf.Lerp(special, 0, 1);
+            StartCoroutine(shootSpecial());
+            //for(int j = 0; j < 2; j++)
+            //{
+                //for (int i = 0; i < Num; i++)
+                //{
+
+                //    GameObject bulletSpecial = Instantiate(Resources.Load("specialBullet"), this.transform.position + Vector3.up * radius, new Quaternion(0, 0, 0, 0)) as GameObject;
+                //    bulletSpecial.transform.RotateAround(this.transform.position, Vector3.forward, 360 / (float)Num * i);
+
+                //}
+            //}
+            
+            //int shootTimes = 0;
+            //while(shootTimes < 3)
+            //{
+                //if (timeSpecial > timeSpecialLimit)
+                //{
+                //    timeSpecial = 0;
+                //    Debug.Log("entrou aqui special: " + shootTimes);
+
+                //    shootTimes++;
+                    
+                //    for (int i = 0; i < Num; i++)
+                //    {
+
+                //        GameObject bulletSpecial = Instantiate(Resources.Load("specialBullet"), this.transform.position + Vector3.up * radius, new Quaternion(0, 0, 0, 0)) as GameObject;
+                //        bulletSpecial.transform.RotateAround(this.transform.position, Vector3.forward, 360 / (float)Num * i);
+
+                //    }
+                //}
+            //}
+            
+        }
+        else
+        {
+            Debug.Log("cannot fire special");
+        }
+        
+    }
+
+    IEnumerator shootSpecial()
+    {
+        int Num = 8;
+        int radius = 13;
+        int shootTimes = 0;
+
+        while (shootTimes < 3)
+        {
+            //if (timeSpecial > timeSpecialLimit)
+            //{
+                //timeSpecial = 0;
+                Debug.Log("entrou aqui special: " + shootTimes);
+
+                shootTimes++;
+
+                for (int i = 0; i < Num; i++)
+                {
+
+                    GameObject bulletSpecial = Instantiate(Resources.Load("specialBullet"), this.transform.position + Vector3.up * radius, new Quaternion(0, 0, 0, 0)) as GameObject;
+                    bulletSpecial.transform.RotateAround(this.transform.position, Vector3.forward, 360 / (float)Num * i);
+
+                }
+                yield return new WaitForSeconds(1.0f);
+
+            //}
+        }
 
     }
 
@@ -341,30 +421,30 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
 
     //}
 
-    void checkSpecial()
-    {
-        if (specialRecebe > 0)
-        {
+    //void checkSpecial()
+    //{
+    //    if (specialRecebe > 0)
+    //    {
 
-            time += Time.deltaTime * 0.2f;
-            if (time > 1.0f)
-            {
-                time = 0.0f;
+    //        time += Time.deltaTime * 0.2f;
+    //        if (time > 1.0f)
+    //        {
+    //            time = 0.0f;
 
-                if (special > 1.0f)
-                {
-                    special = 1.0f;
-                }
-                specialImage.fillAmount = special;
-                specialRecebe = 0;
-            }
-            float specialRestored = special + specialRecebe;
-            special = Mathf.Lerp(special, specialRestored, time);
-            specialImage.fillAmount = special;
-            //health += hpRecebe;
+    //            if (special > 1.0f)
+    //            {
+    //                special = 1.0f;
+    //            }
+    //            specialImage.fillAmount = special;
+    //            specialRecebe = 0;
+    //        }
+    //        float specialRestored = special + specialRecebe;
+    //        special = Mathf.Lerp(special, specialRestored, time);
+    //        specialImage.fillAmount = special;
+    //        //health += hpRecebe;
 
-        }
-    }
+    //    }
+    //}
 
     private void transferLife()
     {
