@@ -12,8 +12,10 @@ public class playerBullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //GameObject player = GameObject.FindGameObjectWithTag("playerShip");
-        direction = new Vector3(0, 1, 0);
+        GameObject player = GameObject.FindGameObjectWithTag("playerShip");
+        //direction = new Vector3(0, 1, 0);
+        direction =  player.transform.position - this.transform.position;
+        direction = -Vector3.Normalize(direction);
 
         //this.transform.Rotate(new Vector3(0, 0, 90));
         time = 0.0f;

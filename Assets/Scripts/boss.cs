@@ -24,6 +24,11 @@ public class boss : MonoBehaviour
     Rect cameraRect;
     Vector3 bottomLeft;
     Vector3 topRight;
+    public GameObject cannon1;
+    public GameObject cannon2;
+    public GameObject cannon3;
+    Material mainMaterial;
+    public Material dmgMaterial;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +49,7 @@ public class boss : MonoBehaviour
         damageColor = Color.white;
         changeDir = false;
         changeBullet = false;
+        mainMaterial = gameMesh.material;
 
         bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 100));
 
@@ -106,14 +112,13 @@ public class boss : MonoBehaviour
         {
             if (changeBullet)
             {
-                Vector3 instPos = this.transform.position;
+                Vector3 instPos = cannon1.transform.position;
                 Quaternion instRot = this.transform.rotation;
                 instRot.z = 90;
                 Instantiate(Resources.Load("bullet2"), instPos, instRot);
-                instPos.x += 15;
+                instPos = cannon2.transform.position;
                 Instantiate(Resources.Load("bullet2"), instPos, instRot);
-                instPos = this.transform.position;
-                instPos.x -= 15;
+                instPos = cannon3.transform.position;
                 Instantiate(Resources.Load("bullet2"), instPos, instRot);
                 timeShoot = 0.0f;
 
@@ -121,14 +126,13 @@ public class boss : MonoBehaviour
             }
             else
             {
-                Vector3 instPos = this.transform.position;
+                Vector3 instPos = cannon1.transform.position;
                 Quaternion instRot = this.transform.rotation;
                 instRot.z = 90;
                 Instantiate(Resources.Load("bullet"), instPos, instRot);
-                instPos.x += 15;
+                instPos = cannon2.transform.position;
                 Instantiate(Resources.Load("bullet"), instPos, instRot);
-                instPos = this.transform.position;
-                instPos.x -= 15;
+                instPos = cannon3.transform.position;
                 Instantiate(Resources.Load("bullet"), instPos, instRot);
                 timeShoot = 0.0f;
 
@@ -179,9 +183,11 @@ public class boss : MonoBehaviour
 
     private IEnumerator flashColor()
     {
-        gameMesh.material.color = damageColor;
+        //gameMesh.material.color = damageColor;
+        gameMesh.material = dmgMaterial;
         yield return new WaitForSeconds(flashDelay);
-        gameMesh.material.color = normalColor;
+        //gameMesh.material.color = normalColor;
+        gameMesh.material = mainMaterial;
         yield return new WaitForSeconds(flashDelay);
     }
 

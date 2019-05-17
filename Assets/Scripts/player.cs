@@ -48,7 +48,22 @@ public class player : MonoBehaviour
     void Update()
     {
         move();
-        if(playerComponent == null)
+        Vector3 mousePos = Input.mousePosition;
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(new Vector3(
+                                                       mousePos.x,
+                                                       mousePos.z,
+                                                       mousePos.y));
+        ////Vector3 forward = mouseWorld - this.transform.position;
+        ////this.transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
+        //transform.LookAt(mouseWorld);
+        Vector3 screen_pos = Camera.main.WorldToScreenPoint(this.transform.position);
+
+        float AngleRad = Mathf.Atan2(mousePos.y - screen_pos.y, mousePos.x - screen_pos.x) * Mathf.Rad2Deg;
+        // Get Angle in Degrees
+        //float AngleDeg = (180 / Mathf.PI) * AngleRad;
+        // Rotate Object
+        this.transform.rotation = Quaternion.Euler(0, 0, AngleRad - 90f);
+        if (playerComponent == null)
         {
             playerComponent = GetComponentInChildren<playerMove>();
         }

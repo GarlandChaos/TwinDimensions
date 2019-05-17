@@ -49,6 +49,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
 
     float timeSpecial;
     float timeSpecialLimit;
+    public Transform cannon;
 
     private void Start()
     {
@@ -58,6 +59,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         {
             Transform shipTransf = GameObject.FindGameObjectWithTag("playerShip").transform;
             transform.SetParent(shipTransf);
+            cannon = shipTransf.GetChild(0);
 
             healthImage = GameObject.FindGameObjectWithTag("player1_hpFill").GetComponent<Image>();
             healthText = GameObject.FindGameObjectWithTag("healthText").GetComponent<Text>();
@@ -236,11 +238,19 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
 
     void shoot()
     {
+        //if (timeShoot > shootRate)
+        //{
+        //    Debug.Log("shooting!");
+        //    Vector3 instPos = this.transform.position;
+        //    instPos.y += this.transform.localScale.y + 13.0f;
+        //    Instantiate(Resources.Load("playerBullet"), instPos, this.transform.rotation);
+        //    timeShoot = 0.0f;
+        //}
+
         if (timeShoot > shootRate)
         {
             Debug.Log("shooting!");
-            Vector3 instPos = this.transform.position;
-            instPos.y += this.transform.localScale.y + 13.0f;
+            Vector3 instPos = cannon.position;
             Instantiate(Resources.Load("playerBullet"), instPos, this.transform.rotation);
             timeShoot = 0.0f;
         }
