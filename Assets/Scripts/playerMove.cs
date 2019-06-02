@@ -50,6 +50,8 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
     float timeSpecial;
     float timeSpecialLimit;
     public Transform cannon;
+    bool lifeDanger;
+    Color healthColor;
 
     private void Start()
     {
@@ -62,6 +64,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
             cannon = shipTransf.GetChild(0);
 
             healthImage = GameObject.FindGameObjectWithTag("player1_hpFill").GetComponent<Image>();
+            healthColor = healthImage.color;
             healthText = GameObject.FindGameObjectWithTag("healthText").GetComponent<Text>();
 
             specialImage = GameObject.FindGameObjectWithTag("player_specialFill").GetComponent<Image>();
@@ -70,6 +73,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         else
         {
             healthImage = GameObject.FindGameObjectWithTag("player2_hpFill").GetComponent<Image>();
+            healthColor = healthImage.color;
             healthText = GameObject.FindGameObjectWithTag("healthText2").GetComponent<Text>();
         }
 
@@ -106,6 +110,8 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
 
         timeSpecial = 0;
         timeSpecialLimit = 2;
+
+        lifeDanger = false;
     }
  
     private void Update()
@@ -177,26 +183,129 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         //}
         //else
         //{
-        healthImage.fillAmount = health;
+
+        if(healthImage.fillAmount != health)
+        {
+            StartCoroutine(fillHealth(healthImage.fillAmount, 0.5f));
+        }
+        //healthImage.fillAmount = health;
 
         if (health > 0.15f)
         {
-            healthText.text = health.ToString();
+            //healthText.text = health.ToString();
+            healthText.text = " ";
+            if (lifeDanger)
+            {
+                lifeDanger = false;
+                StartCoroutine(healthTransition(0.5f, Color.red, healthColor));
+            }
         }
         else
         {
-            healthText.text = "LIMIT REACHED";
+            //healthText.text = "LIMIT REACHED";
+            healthText.text = " ";
+            if(lifeDanger == false)
+            {
+                lifeDanger = true;
+                StartCoroutine(healthTransition(0.5f, healthColor, Color.red));
+            }
         }
         //}
 
         if (photonView.isMine)
         {
-            specialImage.fillAmount = special;
+            if(specialImage.fillAmount != special)
+            {
+                StartCoroutine(fillSpecial(specialImage.fillAmount, 0.5f));
+            }
+            //specialImage.fillAmount = special;
         }
 
         
         
 
+    }
+
+    IEnumerator healthTransition(float timeTransition, Color colorFrom, Color colorTo)
+    {
+
+        float elapsedTime = 0;
+
+        while (elapsedTime < timeTransition)
+        {
+            healthImage.color = Color.Lerp(colorFrom, colorTo, (elapsedTime / timeTransition));
+            //float r = Mathf.Lerp(colorFrom.r, colorTo.r, (elapsedTime / timeTransition));
+            //float g = Mathf.Lerp(colorFrom.g, colorTo.g, (elapsedTime / timeTransition));
+            //float b = Mathf.Lerp(colorFrom.b, colorTo.b, (elapsedTime / timeTransition));
+            //Color newColor = new Color(r, g, b);
+            //healthImage.color = newColor;
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    IEnumerator fillHealth(float current, float timeTransition)
+    {
+        //float current = specialImage.fillAmount;
+        //for(float i = 0f; i < 1f; i += 0.1f)
+        //{
+        //    specialImage.fillAmount = Mathf.Lerp(current, special, i);
+        //    yield return new WaitForSeconds(.1f);
+        //}
+
+        //while (healthImage.fillAmount < health)
+        //{
+        //    if ((healthImage.fillAmount + 0.1f) > health)
+        //    {
+        //        healthImage.fillAmount = health;
+        //    }
+        //    else
+        //    {
+        //        healthImage.fillAmount += 0.1f;
+        //    }
+        //    yield return new WaitForSeconds(1f);
+        //}
+
+        float elapsedTime = 0;
+
+        while (elapsedTime < timeTransition)
+        {
+            healthImage.fillAmount = Mathf.Lerp(current, health, (elapsedTime / timeTransition));
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    IEnumerator fillSpecial(float current, float timeTransition)
+    {
+        //float current = specialImage.fillAmount;
+        //for(float i = 0f; i < 1f; i += 0.1f)
+        //{
+        //    specialImage.fillAmount = Mathf.Lerp(current, special, i);
+        //    yield return new WaitForSeconds(.1f);
+        //}
+
+        //while(specialImage.fillAmount < special)
+        //{
+        //    if((specialImage.fillAmount + 0.1f) > special)
+        //    {
+        //        specialImage.fillAmount = special;
+        //    }
+        //    else
+        //    {
+        //        specialImage.fillAmount += 0.1f;
+        //    }
+        //    yield return new WaitForSeconds(1f);
+        //}
+       
+        float elapsedTime = 0;
+
+        while(elapsedTime < timeTransition)
+        {
+            specialImage.fillAmount = Mathf.Lerp(current, special, (elapsedTime / timeTransition));
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     private void checkInput()
@@ -264,7 +373,8 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         //int radius = 13;
         if(special == 1)
         {
-            special = Mathf.Lerp(special, 0, 1);
+            //special = Mathf.Lerp(special, 0, 1);
+            special = 0;
             StartCoroutine(shootSpecial());
             //for(int j = 0; j < 2; j++)
             //{

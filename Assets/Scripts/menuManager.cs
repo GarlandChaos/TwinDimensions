@@ -2,11 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+//using UnityEngine.EventSystems;
 
 public class menuManager : MonoBehaviour
 {
     public static GameObject instance;
     public GameObject pauseView;
+    public bool isOver = false;
+
+    public Texture2D cursorTexture; //menus
+    public Texture2D cursorTexture2; //in-game
+    public CursorMode cursorMode = CursorMode.Auto;
+    public Vector2 hotSpot = Vector2.zero;
+    bool cursorGame;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +29,9 @@ public class menuManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        cursorGame = false;
+        Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
     }
 
     // Update is called once per frame
@@ -64,10 +76,26 @@ public class menuManager : MonoBehaviour
         }
         if(scene.name == "MainGame" || scene.name == "MainGameB")
         {
+            //if (cursorGame)
+            //{
+                //cursorGame = false;
+            //}
             if (Input.GetKeyUp(KeyCode.Escape))
             {
                 pauseEvent();
             }
+        }
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        if(level == 3 || level == 4)
+        {
+            Cursor.SetCursor(cursorTexture2, hotSpot, cursorMode);
+        }
+        else
+        {
+            Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
         }
     }
 
@@ -104,6 +132,30 @@ public class menuManager : MonoBehaviour
         }
         
     }
+
+    //private void OnMouseEnter()
+    //{
+    //    Debug.Log("Mouse enter");
+    //    isOver = true;
+    //}
+
+    //private void OnMouseExit()
+    //{
+    //    Debug.Log("Mouse exited");
+    //    isOver = false;
+    //}
+
+    //public void OnPointerEnter(PointerEventData eventData)
+    //{
+    //    Debug.Log("Mouse enter");
+    //    isOver = true;
+    //}
+
+    //public void OnPointerExit(PointerEventData eventData)
+    //{
+    //    Debug.Log("Mouse exit");
+    //    isOver = false;
+    //}
 
     public void OnEnable()
     {
