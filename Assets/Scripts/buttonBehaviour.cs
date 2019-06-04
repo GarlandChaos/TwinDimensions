@@ -17,7 +17,11 @@ public class buttonBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExit
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Mouse0) && isOver)
+        {
+            audioController.instance.GetComponent<audioController>().playMouseClick();
+        }
+
     }
 
     //private void OnMouseEnter()
@@ -34,6 +38,7 @@ public class buttonBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
+        audioController.instance.GetComponent<audioController>().playMouseOver();
         //Output to console the GameObject's name and the following message
         Debug.Log("Cursor Entering " + name + " GameObject");
         isOver = true;

@@ -29,6 +29,9 @@ public class boss : MonoBehaviour
     public GameObject cannon3;
     Material mainMaterial;
     public Material dmgMaterial;
+    AudioSource audioSource;
+    public AudioClip soundShoot;
+    public AudioClip soundDestroyed;
 
     // Start is called before the first frame update
     void Start()
@@ -60,6 +63,9 @@ public class boss : MonoBehaviour
          bottomLeft.y,
          topRight.x - bottomLeft.x,
          topRight.y - bottomLeft.y);
+
+        audioSource = this.GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -120,6 +126,7 @@ public class boss : MonoBehaviour
                 Instantiate(Resources.Load("bullet2"), instPos, instRot);
                 instPos = cannon3.transform.position;
                 Instantiate(Resources.Load("bullet2"), instPos, instRot);
+                audioSource.PlayOneShot(soundShoot);
                 timeShoot = 0.0f;
 
                 changeBullet = false;
@@ -134,6 +141,7 @@ public class boss : MonoBehaviour
                 Instantiate(Resources.Load("bullet"), instPos, instRot);
                 instPos = cannon3.transform.position;
                 Instantiate(Resources.Load("bullet"), instPos, instRot);
+                audioSource.PlayOneShot(soundShoot);
                 timeShoot = 0.0f;
 
                 changeBullet = true;
@@ -157,6 +165,7 @@ public class boss : MonoBehaviour
     {
         if (health <= 0.0f)
         {
+            soundController.instance.GetComponent<soundController>().playDestroy();
             WaveManager.instance.GetComponent<WaveManager>().removeEnemy();
 
             int drop = Random.Range(1, 4);

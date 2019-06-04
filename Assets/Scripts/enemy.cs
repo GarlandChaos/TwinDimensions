@@ -19,6 +19,9 @@ public class enemy : MonoBehaviour
     public Color damageColor;
     Material mainMaterial;
     public Material dmgMaterial;
+    AudioSource audioSource;
+    public AudioClip soundShoot;
+    public AudioClip soundDestroyed;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +40,7 @@ public class enemy : MonoBehaviour
         normalColor = gameMesh.material.color;
         damageColor = Color.white;
         mainMaterial = gameMesh.material;
+        audioSource = this.GetComponent<AudioSource>();
 
 
     }
@@ -86,6 +90,7 @@ public class enemy : MonoBehaviour
         if(timeShoot > shootRate)
         {
             Instantiate(Resources.Load("bullet"), this.transform.position, this.transform.rotation);
+            audioSource.PlayOneShot(soundShoot);
             timeShoot = 0.0f;
         }
     }
@@ -104,6 +109,7 @@ public class enemy : MonoBehaviour
     {
         if(health <= 0.0f)
         {
+            soundController.instance.GetComponent<soundController>().playDestroy();
             WaveManager.instance.GetComponent<WaveManager>().removeEnemy();
 
             int drop = Random.Range(1, 4);

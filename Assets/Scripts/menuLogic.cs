@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class menuLogic : MonoBehaviour {
 
@@ -10,5 +11,10 @@ public class menuLogic : MonoBehaviour {
     {
         //connectedMenu.SetActive(false);
         PhotonNetwork.LoadLevel("MainGame");
+    }
+
+    public void loadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

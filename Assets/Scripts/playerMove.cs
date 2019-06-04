@@ -52,6 +52,11 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
     public Transform cannon;
     bool lifeDanger;
     Color healthColor;
+    AudioSource audioSource;
+    public AudioClip soundShoot;
+    public AudioClip soundCollect;
+    public AudioClip soundTransfer;
+    public AudioClip soundSpecial;
 
     private void Start()
     {
@@ -68,6 +73,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
             healthText = GameObject.FindGameObjectWithTag("healthText").GetComponent<Text>();
 
             specialImage = GameObject.FindGameObjectWithTag("player_specialFill").GetComponent<Image>();
+            audioSource = this.GetComponent<AudioSource>();
 
         }
         else
@@ -361,6 +367,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
             Debug.Log("shooting!");
             Vector3 instPos = cannon.position;
             Instantiate(Resources.Load("playerBullet"), instPos, this.transform.rotation);
+            audioSource.PlayOneShot(soundShoot);
             timeShoot = 0.0f;
         }
     }
@@ -435,6 +442,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
 
                     GameObject bulletSpecial = Instantiate(Resources.Load("specialBullet"), this.transform.position + Vector3.up * radius, new Quaternion(0, 0, 0, 0)) as GameObject;
                     bulletSpecial.transform.RotateAround(this.transform.position, Vector3.forward, 360 / (float)Num * i);
+                    audioSource.PlayOneShot(soundSpecial, 0.5f);
 
                 }
                 yield return new WaitForSeconds(1.0f);
@@ -695,6 +703,17 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         bool reliable = true;
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; // You would have to set the Receivers to All in order to receive this event on the local client as well
         PhotonNetwork.RaiseEvent(evCode, content, reliable, raiseEventOptions);
+
+        playSoundTransferEvent();
+    }
+
+    public void playSoundTransferEvent()
+    {
+        byte evCode = 10; // Custom Event 0
+        object[] content = new object[] {  }; // Array contains the target position and the IDs of the selected units
+        bool reliable = true;
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+        PhotonNetwork.RaiseEvent(evCode, content, reliable, raiseEventOptions);
     }
 
     public void collectibleHPEvent()
@@ -772,6 +791,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         {
             if (photonView.isMine)
             {
+                audioSource.PlayOneShot(soundCollect);
                 Debug.Log("INSIDE EVENT 3");
                 object[] data = (object[])content;
 
@@ -799,6 +819,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         {
             if (photonView.isMine)
             {
+                audioSource.PlayOneShot(soundCollect);
                 object[] data = (object[])content;
 
                 float newSpecial = special + (float)data[0];
@@ -826,6 +847,13 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
 
             P2end = (bool)data[0];
         }
+        if (eventCode == 10) //som transferência HP
+        {
+            object[] data = (object[])content;
+
+            audioSource.PlayOneShot(soundTransfer);
+        }
+
     }
 
     public void OnEnable()
