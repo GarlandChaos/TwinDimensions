@@ -4819,7 +4819,7 @@ Transform:
   m_GameObject: {fileID: 2632294093887011758}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 100}
-  m_LocalScale: {x: 12, y: 12, z: 12}
+  m_LocalScale: {x: 8, y: 8, z: 8}
   m_Children:
   - {fileID: 345264721}
   - {fileID: 1562241856}
@@ -4901,12 +4901,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   targetDist: 0
-  speed: 25
+  speed: 120
   shootRate: 0.8
   timeShoot: 0
   timeDamage: 0
   timeMove: 0
-  moveRate: 5
+  moveRate: 3
   changeDir: 0
   changeBullet: 0
   damageWait: 0

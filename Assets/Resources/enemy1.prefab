@@ -9427,7 +9427,7 @@ Transform:
   m_GameObject: {fileID: 1513550708398203466}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0, y: 0, z: 100}
-  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 761455330}
   - {fileID: 1833238475}
@@ -9506,7 +9506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   targetDist: 0
-  speed: 0.1
+  speed: 1
   shootRate: 1
   timeShoot: 0
   timeDamage: 0

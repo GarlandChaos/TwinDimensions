@@ -30,7 +30,7 @@ public class bullet : MonoBehaviour
             this.transform.Rotate(new Vector3(0, 0, 90));
 
 
-            speed = 1.0f;
+            speed = 2.0f;
         }
         else if(this.tag == "bullet2")
         {

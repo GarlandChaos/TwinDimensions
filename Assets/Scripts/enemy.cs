@@ -22,6 +22,14 @@ public class enemy : MonoBehaviour
     AudioSource audioSource;
     public AudioClip soundShoot;
     public AudioClip soundDestroyed;
+    Rect cameraRect;
+    Vector3 bottomLeft;
+    Vector3 topRight;
+    float timeFollow;
+    bool state1;
+    bool state2;
+    Vector3 waypoint;
+    bool adjustPos;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +50,21 @@ public class enemy : MonoBehaviour
         mainMaterial = gameMesh.material;
         audioSource = this.GetComponent<AudioSource>();
 
+        bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 100));
 
+        topRight = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, Camera.main.pixelHeight, 100));
+
+        cameraRect = new Rect(
+         bottomLeft.x,
+         bottomLeft.y,
+         topRight.x - bottomLeft.x,
+         topRight.y - bottomLeft.y);
+
+        timeFollow = 0.0f;
+
+        state1 = true;
+        state2 = false;
+        adjustPos = false;
     }
 
     // Update is called once per frame
@@ -56,22 +78,53 @@ public class enemy : MonoBehaviour
     void huntPlayer()
     {
         timeShoot += 1.0f * Time.deltaTime;
+        timeFollow += 1.0f * Time.deltaTime;
 
         float d = Vector3.Distance(player.transform.position, transform.position);
 
-        if (d > targetDist)
+        if(timeFollow > 5f)
         {
-            Vector3 dist = new Vector3(player.transform.position.x - this.transform.position.x,
-                                   player.transform.position.y - this.transform.position.y,
-                                   100);
+            timeFollow = 0f;
+            if (state1)
+            {
+                state1 = false;
+                chooseNewPath();
+            }
+            else
+            {
+                state1 = true;
+            }
+        }
 
-            transform.position = Vector3.Lerp(transform.position, dist, Time.deltaTime * speed);
+        if (state1)
+        {
+            if(adjustPos == false)
+            {
+                followTarget();
+            }
+            
         }
         else
         {
-            shoot();
-
+            if(adjustPos == true)
+            {
+                adjustPos = false;
+            }
+            followNewPath();
         }
+
+        //if (d > targetDist)
+        //{
+
+        //    //followTarget();
+        //    //chooseNewPath();
+        //}
+        //else
+        //{
+        //    //shoot();
+
+        //}
+        shoot();
         //print("Distance to other: " + d);
 
         Vector3 lookPos = player.transform.position - this.transform.position;
@@ -93,6 +146,34 @@ public class enemy : MonoBehaviour
             audioSource.PlayOneShot(soundShoot);
             timeShoot = 0.0f;
         }
+    }
+    
+    void followTarget()
+    {
+        Vector3 dist = new Vector3(player.transform.position.x - this.transform.position.x,
+                                   player.transform.position.y - this.transform.position.y,
+                                   100);
+
+        transform.position = Vector3.Lerp(transform.position, dist, Time.deltaTime * speed);
+    }
+
+    void chooseNewPath()
+    {
+        waypoint = new Vector3(Random.Range(cameraRect.xMin, cameraRect.xMax),
+                                Random.Range(cameraRect.yMin, cameraRect.yMax),
+                                   100);
+
+        //transform.position = new Vector3(Mathf.Clamp(transform.position.x, cameraRect.xMin, cameraRect.xMax),
+        //                                Mathf.Clamp(transform.position.y, cameraRect.yMin, cameraRect.yMax), 100);
+    }
+
+    void followNewPath()
+    {
+
+        transform.position = Vector3.Lerp(transform.position, waypoint, Time.deltaTime * speed);
+
+        //transform.position = new Vector3(Mathf.Clamp(transform.position.x, cameraRect.xMin, cameraRect.xMax),
+        //                                Mathf.Clamp(transform.position.y, cameraRect.yMin, cameraRect.yMax), 100);
     }
 
     void controlDamage()
@@ -183,6 +264,7 @@ public class enemy : MonoBehaviour
             Vector3 newPos = (this.transform.position - other.transform.position).normalized * 40.0f + other.transform.position;
             //newPos.z = 0;
             transform.position = newPos;
+            adjustPos = true;
             //transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * speed);
             //StartCoroutine(MoveToPosition(newPos, 1.0f));
 

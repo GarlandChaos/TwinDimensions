@@ -20,7 +20,7 @@ public class playerBullet : MonoBehaviour
         //this.transform.Rotate(new Vector3(0, 0, 90));
         time = 0.0f;
         lifeSpan = 5.0f;
-        speed = 40.0f;
+        speed = 80.0f;
     }
 
     // Update is called once per frame
