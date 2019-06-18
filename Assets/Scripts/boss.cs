@@ -126,7 +126,7 @@ public class boss : MonoBehaviour
                 Instantiate(Resources.Load("bullet2"), instPos, instRot);
                 instPos = cannon3.transform.position;
                 Instantiate(Resources.Load("bullet2"), instPos, instRot);
-                audioSource.PlayOneShot(soundShoot);
+                audioSource.PlayOneShot(soundShoot, audioController.instance.GetComponent<audioController>().getvolumeSFX());
                 timeShoot = 0.0f;
 
                 changeBullet = false;
@@ -141,7 +141,7 @@ public class boss : MonoBehaviour
                 Instantiate(Resources.Load("bullet"), instPos, instRot);
                 instPos = cannon3.transform.position;
                 Instantiate(Resources.Load("bullet"), instPos, instRot);
-                audioSource.PlayOneShot(soundShoot);
+                audioSource.PlayOneShot(soundShoot, audioController.instance.GetComponent<audioController>().getvolumeSFX());
                 timeShoot = 0.0f;
 
                 changeBullet = true;

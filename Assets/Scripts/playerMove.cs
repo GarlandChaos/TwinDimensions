@@ -367,7 +367,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
             Debug.Log("shooting!");
             Vector3 instPos = cannon.position;
             Instantiate(Resources.Load("playerBullet"), instPos, this.transform.rotation);
-            audioSource.PlayOneShot(soundShoot);
+            audioSource.PlayOneShot(soundShoot, audioController.instance.GetComponent<audioController>().getvolumeSFX());
             timeShoot = 0.0f;
         }
     }
@@ -442,7 +442,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
 
                     GameObject bulletSpecial = Instantiate(Resources.Load("specialBullet"), this.transform.position + Vector3.up * radius, new Quaternion(0, 0, 0, 0)) as GameObject;
                     bulletSpecial.transform.RotateAround(this.transform.position, Vector3.forward, 360 / (float)Num * i);
-                    audioSource.PlayOneShot(soundSpecial, 0.5f);
+                    audioSource.PlayOneShot(soundSpecial, audioController.instance.GetComponent<audioController>().getvolumeSFX());
 
                 }
                 yield return new WaitForSeconds(1.0f);
@@ -791,7 +791,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         {
             if (photonView.isMine)
             {
-                audioSource.PlayOneShot(soundCollect);
+                audioSource.PlayOneShot(soundCollect, audioController.instance.GetComponent<audioController>().getvolumeSFX());
                 Debug.Log("INSIDE EVENT 3");
                 object[] data = (object[])content;
 
@@ -819,7 +819,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         {
             if (photonView.isMine)
             {
-                audioSource.PlayOneShot(soundCollect);
+                audioSource.PlayOneShot(soundCollect, audioController.instance.GetComponent<audioController>().getvolumeSFX());
                 object[] data = (object[])content;
 
                 float newSpecial = special + (float)data[0];
@@ -851,7 +851,7 @@ public class playerMove : Photon.PunBehaviour, IPunObservable {
         {
             object[] data = (object[])content;
 
-            audioSource.PlayOneShot(soundTransfer);
+            audioSource.PlayOneShot(soundTransfer, audioController.instance.GetComponent<audioController>().getvolumeSFX());
         }
 
     }

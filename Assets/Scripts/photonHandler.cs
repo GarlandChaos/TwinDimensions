@@ -137,7 +137,7 @@ public class photonHandler : MonoBehaviour {
 
     public void mainMenuEvent()
     {
-        byte evCode = 1; // Custom Event 0
+        byte evCode = 1; // Custom Event 1
         object[] content = new object[] { 1 }; // Array contains the target position and the IDs of the selected units
         bool reliable = true;
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well

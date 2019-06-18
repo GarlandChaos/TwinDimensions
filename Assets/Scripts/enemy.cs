@@ -143,7 +143,7 @@ public class enemy : MonoBehaviour
         if(timeShoot > shootRate)
         {
             Instantiate(Resources.Load("bullet"), this.transform.position, this.transform.rotation);
-            audioSource.PlayOneShot(soundShoot);
+            audioSource.PlayOneShot(soundShoot, audioController.instance.GetComponent<audioController>().getvolumeSFX());
             timeShoot = 0.0f;
         }
     }

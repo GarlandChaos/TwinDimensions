@@ -13,6 +13,7 @@ public class soundController : MonoBehaviour
     {
         instance = this.gameObject;
         source = this.GetComponent<AudioSource>();
+        source.volume = audioController.instance.GetComponent<audioController>().getvolumeMusic();
     }
 
     // Update is called once per frame
@@ -23,6 +24,6 @@ public class soundController : MonoBehaviour
 
     public void playDestroy()
     {
-        source.PlayOneShot(soundDestroyed);
+        source.PlayOneShot(soundDestroyed, audioController.instance.GetComponent<audioController>().getvolumeSFX());
     }
 }

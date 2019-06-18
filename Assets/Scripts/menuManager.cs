@@ -51,7 +51,7 @@ public class menuManager : MonoBehaviour
 
     public void configuration()
     {
-        SceneManager.LoadScene("Configuration");
+        SceneManager.LoadScene("Configurations");
     }
 
     public void credits()
@@ -67,7 +67,7 @@ public class menuManager : MonoBehaviour
     void controls()
     {
         Scene scene = SceneManager.GetActiveScene();
-        if (scene.name == "Credits")
+        if (scene.name == "Credits" || scene.name == "Configurations")
         {
             if (Input.GetKeyUp(KeyCode.Escape))
             {
